@@ -2,14 +2,14 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
     <li class="breadcrumb-item active"><a routerLink="/">Categorias</a></li>
-    <li class="breadcrumb-item active">Formulario de categoria</li>
+    <li class="breadcrumb-item active">{{pageTilte}}</li>
   </ol>
 </nav>
 
 <div class="row mb-4">
   <div class="col-md">
     <h1 class="h2 border-left pl-2">
-      Formulario de Categoria
+      {{pageTilte}}
     </h1>
   </div>
   <div class="col-md">
@@ -20,7 +20,7 @@
 </div>
 
 
-<form [formGroup]="categoryForm">
+<form [formGroup]="categoryForm" (submit)="submitForm()">
 
   <div class="card">
     <div class="card-header">
@@ -30,16 +30,24 @@
       <div class="form-row">
         <div class="form-group col-md-4">
           <label for="name">Nome</label>
-          <input type="text" class="form-control" id="name">
+          <input type="text" class="form-control" id="name" formControlName="name">
+
+          <!-- msg de erros  name-->
+          <div class="text-danger" *ngIf="categoryForm.get('name').invalid && categoryForm.get('name').touched">
+            <div *ngIf="categoryForm.get('name').errors.required">dados obrigatórios</div>
+            <div *ngIf="categoryForm.get('name').errors.minlength">deve ter no minimo 2 caracteres</div>
+          </div>
+          <!-- end validation -->
         </div>
         <div class="form-group col-md-8">
           <label for="description">Descrição</label>
-          <input type="text" class="form-control" id="description">
+          <input type="text" class="form-control" id="description" formControlName="description">
         </div>
       </div>
     </div>
   </div>
-  <button type="submit" class="btn btn-primary btn-lg float-right mt-3">
+  <button [disabled]="submittingForm || categoryForm.invalid" type="submit"
+    class="btn btn-primary btn-lg float-right mt-3">
     Salvar
   </button>
 </form>
